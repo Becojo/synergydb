@@ -1,5 +1,7 @@
 # SynergyDB
 
+_Experimental key-value, conflict-free database written in Ruby_
+
 ## Installation
 
 Add this line to your application's Gemfile:
