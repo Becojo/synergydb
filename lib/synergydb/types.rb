@@ -86,7 +86,7 @@ module Synergydb::Types
     end
 
     def set(value)
-      @type.create(value).merge(self)
+      [:ok, @type.create(value).merge(self)]
     end
 
     def get(*_)
@@ -111,7 +111,7 @@ module Synergydb::Types
         @values[key] = value
       end
 
-      Str.create(key)
+      [:ok, self]
     end
 
     def get(key)

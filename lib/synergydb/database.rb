@@ -15,7 +15,8 @@ module Synergydb
     end
 
     def set(name, *args)
-      [:ok, @collections[name][:value].set(*args).unwrap]
+      status, @collections[name][:value] = @collections[name][:value].set(*args)
+      status
     end
 
     def get(name, *args)
