@@ -2,6 +2,9 @@
 
 _Experimental key-value, conflict-free database written in Ruby_
 
+
+[![Travis CI](https://travis-ci.org/Becojo/synergydb.svg?branch=master)](https://github.com/Becojo/synergydb) [![BADGINATOR](https://badginator.herokuapp.com/becojo/synergydb.svg)](https://github.com/Becojo/synergydb)
+
 ## Installation
 
 Add this line to your application's Gemfile:
