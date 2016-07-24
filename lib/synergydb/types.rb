@@ -1,3 +1,5 @@
+require 'synergydb'
+
 module Synergydb::Types
   class BaseType
     attr_reader :type, :sub_types

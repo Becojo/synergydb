@@ -9,7 +9,12 @@ module Synergydb
     end
 
     def create(name, type, value=nil)
-      type = Synergydb::Types.class_eval(type.gsub(/[^\[\],a-z]/i, '')) # whatev
+      begin
+        type = Synergydb::Types.class_eval(type.gsub(/[^\[\],a-z]/i, '')) # whatev
+      rescue NameError => e
+        return [:err, "Unknown type #{e.name}"]
+      end
+
       @collections[name] = { type: type, value: type.create(value) }
       [:ok, name]
     end
