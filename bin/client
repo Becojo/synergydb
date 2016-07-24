@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+require 'irb'
+require 'synergydb/types'
+require 'synergydb/client'
+
+include Synergydb::Types
+
+HOST = ARGV[0] || '127.0.0.1'
+PORT = ARGV[1] || '1234'
+
+class DSL
+  class Collection
+    def initialize(name, parent)
+      @name = name
+      @parent = parent
+    end
+
+    def inspect
+      "Collection[#{@name}]@#{@parent.inspect}"
+    end
+  end
+
+  def method_missing(name)
+    Collection.new(name, self)
+  end
+
+  def inspect
+    "Database[#{HOST}:#{PORT}]"
+  end
+end
+
+def db
+  DSL.new
+end
+
+ARGV.clear
+
+module IRB
+    def self.start_session(binding)
+        unless @__initialized
+            args = ARGV
+            ARGV.replace(ARGV.dup)
+            IRB.setup(nil)
+            ARGV.replace(args)
+            @__initialized = true
+        end
+        @CONF[:IRB_RC].call(irb.context) if @CONF[:IRB_RC]
+        @CONF[:AUTO_INDENT] = true
+        @CONF[:PROMPT_MODE] = :SIMPLE
+        IRB.run_config
+        workspace = WorkSpace.new(binding)
+        irb = Irb.new(workspace)
+        @CONF[:MAIN_CONTEXT] = irb.context
+        catch(:IRB_EXIT) do
+            irb.eval_input
+        end
+    end
+end
+
+IRB.start_session(binding)
