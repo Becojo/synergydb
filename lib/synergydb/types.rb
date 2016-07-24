@@ -52,6 +52,15 @@ module Synergydb::Types
       end
     end
 
+    def set(value)
+      new_value = @type.create(value).merge(self)
+      [[:ok], new_value]
+    end
+
+    def get(*_)
+      [:ok, @value.unwrap]
+    end
+
     def to_s
       "Min(#{@value})"
     end
@@ -88,11 +97,12 @@ module Synergydb::Types
     end
 
     def set(value)
-      [:ok, @type.create(value).merge(self)]
+      new_value = @type.create(value).merge(self)
+      [[:ok], new_value]
     end
 
     def get(*_)
-      @value.unwrap
+      [:ok, @value.unwrap]
     end
   end
 
@@ -113,11 +123,15 @@ module Synergydb::Types
         @values[key] = value
       end
 
-      [:ok, self]
+      [[:ok], self]
     end
 
     def get(key)
-      @values[key].unwrap
+      if @values.has_key? key
+        [:ok, @values[key].unwrap]
+      else
+        [:ok, 'Key does not exist']
+      end
     end
 
     def merge(other)

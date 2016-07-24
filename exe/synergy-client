@@ -19,16 +19,32 @@ class DSL
     end
 
     def set(*args)
-      $client.set(@name, *args)
+      @parent.get(@name, *args)
     end
 
     def get(*args)
-      $client.get(@name, *args)
+      @parent.get(@name, *args)
+    end
+
+    def type
+      @parent.type(@name)
     end
 
     def inspect
       "Collection[#{@name}]@#{@parent.inspect}"
     end
+  end
+
+  def type(name)
+    $client.type(name)
+  end
+
+  def get(*args)
+    $client.get(*args)
+  end
+
+  def set(*args)
+    $client.set(*args)
   end
 
   def create(name, type, value=nil)

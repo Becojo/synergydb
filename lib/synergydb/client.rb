@@ -23,6 +23,10 @@ module Synergydb
       send_command('ping')
     end
 
+    def type(key)
+      send_command('type', [key])
+    end
+
     def close
       @socket.close
     end
