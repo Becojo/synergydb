@@ -45,6 +45,13 @@ describe Synergydb do
       [["set", "bounds", 0, 100], [:ok]],
       [["set", "bounds", 1, 0], [:ok]],
       [["get", "bounds"], [:ok, [80, 20]]],
+
+      [["create", "things", "Set[Int]", [1]], [:ok, "things"]],
+      [["get", "things"], [:ok, [1]]],
+      [["set", "things", 65], [:ok]],
+      [["get", "things"], [:ok, [1, 65]]],
+      [["set", "things", 1], [:ok]],
+      [["get", "things"], [:ok, [1, 65]]],
     ]
 
     commands.each do |(command, expected)|

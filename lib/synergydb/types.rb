@@ -259,4 +259,41 @@ module Synergydb::Types
       "Tuple(#{values})"
     end
   end
+
+  class Set < BaseType
+    def initialize(type, values=nil)
+      @type = type
+      @values = {}
+
+      unless values.nil?
+        values.each do |value|
+          @values[value] = 1
+        end
+      end
+    end
+
+    def set(value)
+      value = @type.sub_type.create(value)
+      @values[value.unwrap] = 1
+      [[:ok], self]
+    end
+
+    def merge(other)
+      Set.new(@type, other.values.merge(@values))
+    end
+
+    def get
+      [:ok, unwrap]
+    end
+
+    def unwrap
+      @values.keys
+    end
+
+    def to_s
+      values = @values.map(&:to_s).join(', ')
+
+      "Set(#{values})"
+    end
+  end
 end
