@@ -150,7 +150,7 @@ module Synergydb::Types
     end
   end
 
-  class Nat < BaseType
+  class Int < BaseType
     attr_reader :value
 
     def initialize(type, value=0)
@@ -165,7 +165,7 @@ module Synergydb::Types
     end
 
     def to_s
-      "Nat(#{@value})"
+      "Int(#{@value})"
     end
 
     def unwrap
