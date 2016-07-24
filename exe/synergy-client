@@ -9,6 +9,8 @@ include Synergydb::Types
 HOST = ARGV[0] || '127.0.0.1'
 PORT = ARGV[1] || '1234'
 
+$client = Synergydb::Client.new(HOST, PORT)
+
 class DSL
   class Collection
     def initialize(name, parent)
@@ -16,9 +18,23 @@ class DSL
       @parent = parent
     end
 
+    def set(*args)
+      $client.set(@name, *args)
+    end
+
+    def get(*args)
+      $client.get(@name, *args)
+    end
+
     def inspect
       "Collection[#{@name}]@#{@parent.inspect}"
     end
+  end
+
+  def create(name, type, value=nil)
+    type = type.to_s.gsub('Synergydb::Types::', '')
+
+    $client.create(name, type, value)
   end
 
   def method_missing(name)

@@ -2,23 +2,6 @@ require 'synergydb/types'
 require 'json'
 
 module Synergydb
-
-  class Response
-    attr_reader :code
-
-    def initialize(response)
-      @code, *@results = response
-    end
-
-    def success?
-      @code == :ok
-    end
-
-    def error?
-      !success?
-    end
-  end
-
   class Client
     def initialize(host = '127.0.0.1', port = 1234)
       @socket = TCPSocket.open(host, port)
@@ -46,7 +29,7 @@ module Synergydb
 
     private
 
-    def send_command(command, args)
+    def send_command(command, args = [])
       json = ([command] + args).to_json
 
       @socket.puts(json)
