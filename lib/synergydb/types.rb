@@ -218,4 +218,45 @@ module Synergydb::Types
       end
     end
   end
+
+  class Tuple < BaseType
+    attr_reader :values
+
+    def initialize(type, values=nil)
+      @type = type
+
+      if values.nil?
+        @values = type.sub_types.map { |type| type.create }
+      else
+        @values = values.zip(type.sub_types).map { |(value, type)| type.create(value) }
+      end
+    end
+
+    def merge(other)
+      Tuple.new(@type, other.values.zip(@values).map { |(a, b)| a.merge(b) })
+    end
+
+    def set(index, value)
+      if index >= 0 && index < @values.size
+        @values[index] = @values[index].merge(@type.sub_types[index].create(value))
+        [[:ok], self]
+        else
+        [[:err, 'Index out of bounds']]
+      end
+    end
+
+    def get(index=nil)
+      [:ok, unwrap]
+    end
+
+    def unwrap
+      @values.map(&:unwrap)
+    end
+
+    def to_s
+      values = @values.map(&:to_s).join(', ')
+
+      "Tuple(#{values})"
+    end
+  end
 end

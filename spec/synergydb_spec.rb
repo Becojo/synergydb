@@ -36,6 +36,15 @@ describe Synergydb do
       [["get", "users", "user1"], [:ok, [11, { name: "bobby"}]]],
       [["set", "users", "user1", [9,   { name: "bob the great" }]], [:ok]],
       [["get", "users", "user1"], [:ok, [11, { name: "bobby"}]]],
+
+      [["create", "bounds", "Tuple[Min[Int], Max[Int]]", [100, 0]], [:ok, "bounds"]],
+      [["get", "bounds"], [:ok, [100, 0]]],
+      [["set", "bounds", 0, 80], [:ok]],
+      [["set", "bounds", 1, 20], [:ok]],
+      [["get", "bounds"], [:ok, [80, 20]]],
+      [["set", "bounds", 0, 100], [:ok]],
+      [["set", "bounds", 1, 0], [:ok]],
+      [["get", "bounds"], [:ok, [80, 20]]],
     ]
 
     commands.each do |(command, expected)|
