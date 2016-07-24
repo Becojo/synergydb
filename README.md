@@ -3,7 +3,7 @@
 _Experimental key-value, conflict-free database written in Ruby_
 
 
-[![Travis CI](https://travis-ci.org/Becojo/synergydb.svg?branch=master)](https://github.com/Becojo/synergydb) [![BADGINATOR](https://badginator.herokuapp.com/becojo/synergydb.svg)](https://github.com/Becojo/synergydb)
+[![Travis CI](https://travis-ci.org/Becojo/synergydb.svg?branch=master)](https://travis-ci.org/Becojo/synergydb) [![BADGINATOR](https://badginator.herokuapp.com/becojo/synergydb.svg)](https://github.com/Becojo/synergydb)
 
 ## Installation
 
