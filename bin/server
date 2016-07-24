@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'synergydb/server'
+
+server = Synergydb::Server.new
+
+Signal.trap('INT') do
+  server.kill
+  exit
+end
+
+server.start
