@@ -11,25 +11,41 @@ module Synergydb
     def create(name, type, value=nil)
       type = Synergydb::Types.class_eval(type.gsub(/[^\[\],a-z]/i, '')) # whatev
       @collections[name] = { type: type, value: type.create(value) }
-      :ok
+      [:ok, name]
     end
 
     def set(name, *args)
       status, @collections[name][:value] = @collections[name][:value].set(*args)
-      status
+      [status]
     end
 
     def get(name, *args)
-      @collections[name][:value].get(*args)
+      if @collections.has_key? name
+        [:ok, @collections[name][:value].get(*args)]
+      else
+        [:err, "No such key"]
+      end
     end
 
     def ping
-      :pong
+      [:ok, :pong]
+    end
+
+    def sync(*args)
+      [:err, "Not implemented"]
     end
 
     def handle(command)
-      method, *args = command
-      send(method, *args)
+      begin
+        method, *args = command
+        if %w{ping get set create sync}.include? method
+          send(*command)
+        else
+          [:err, "Unknown command"]
+        end
+      rescue Exception => e
+        [:err, e]
+      end
     end
   end
 end
