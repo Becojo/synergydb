@@ -1,0 +1,30 @@
+Style/WordArray:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/GlobalVars:
+  Exclude:
+    - 'exe/synergy-client'
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'lib/synergydb/types.rb'
+
+Lint/RescueException:
+  Exclude:
+    - 'lib/synergydb/database.rb'
+    - 'lib/synergydb/server.rb'

@@ -41,5 +41,4 @@ module Synergydb
       JSON.parse(@socket.gets)
     end
   end
-
 end

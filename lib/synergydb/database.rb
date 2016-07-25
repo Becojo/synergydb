@@ -8,7 +8,7 @@ module Synergydb
       @collections = {}
     end
 
-    def create(name, type, value=nil)
+    def create(name, type, value = nil)
       begin
         type = Synergydb::Types.class_eval(type.gsub(/[^\[\],a-z]/i, '')) # whatev
       rescue NameError => e
@@ -23,18 +23,16 @@ module Synergydb
     def set(name, *args)
       (status, *response), value = @collections[name][:value].set(*args)
 
-      if status == :ok
-        @collections[name][:value] = value
-      end
+      @collections[name][:value] = value if status == :ok
 
       [status] + response
     end
 
     def get(name, *args)
-      if @collections.has_key? name
+      if @collections.key? name
         @collections[name][:value].get(*args)
       else
-        [:err, "No such key"]
+        [:err, 'No such key']
       end
     end
 
@@ -42,28 +40,29 @@ module Synergydb
       [:ok, :pong]
     end
 
-    def sync(*args)
-      [:err, "Not implemented"]
+    def sync(*_)
+      [:err, 'Not implemented']
     end
 
     def type(name)
-      if @collections.has_key? name
+      if @collections.key? name
         [:ok, @collections[name][:type].to_s.gsub('Synergydb::Types::', '')]
       else
-        [:err, "No such key"]
+        [:err, 'No such key']
       end
     end
 
     def handle(command)
-      begin
-        method, *args = command
-        if %w{ping get set create sync type}.include? method
+      method, = command
+
+      if %w(ping get set create sync type).include? method
+        begin
           send(*command)
-        else
-          [:err, "Unknown command"]
+        rescue Exception => e
+          [:err, e]
         end
-      rescue Exception => e
-        [:err, e]
+      else
+        [:err, 'Unknown command']
       end
     end
   end

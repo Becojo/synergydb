@@ -109,7 +109,7 @@ module Synergydb::Types
   class Map < BaseType
     attr_reader :values
 
-    def initialize(type, value=nil)
+    def initialize(type, value = nil)
       @type = type
       @values = (value || {}).map { |k, v| [k, @type.sub_type.create(v)] }.to_h
     end
@@ -117,17 +117,17 @@ module Synergydb::Types
     def set(key, value)
       value = @type.sub_type.create(value)
 
-      if @values.has_key? key
-        @values[key] = @values[key].merge(value)
-      else
-        @values[key] = value
-      end
+      @values[key] = if @values.key? key
+                       @values[key].merge(value)
+                     else
+                       @values[key] = value
+                     end
 
       [[:ok], self]
     end
 
     def get(key)
-      if @values.has_key? key
+      if @values.key? key
         [:ok, @values[key].unwrap]
       else
         [:ok, 'Key does not exist']
@@ -152,7 +152,7 @@ module Synergydb::Types
   end
 
   class Str < BaseType
-    def initialize(type, value="")
+    def initialize(type, value = '')
       @type = type
       @value = value.to_s
     end
@@ -169,7 +169,7 @@ module Synergydb::Types
   class Int < BaseType
     attr_reader :value
 
-    def initialize(type, value=0)
+    def initialize(type, value = 0)
       @type = type
       @value = value.to_i
     end
@@ -192,7 +192,7 @@ module Synergydb::Types
   class Timestamped < BaseType
     attr_reader :timestamp, :value
 
-    def initialize(type, value=nil)
+    def initialize(type, value = nil)
       @type = type
 
       if value.is_a? Array
@@ -222,14 +222,15 @@ module Synergydb::Types
   class Tuple < BaseType
     attr_reader :values
 
-    def initialize(type, values=nil)
+    def initialize(type, values = nil)
       @type = type
 
-      if values.nil?
-        @values = type.sub_types.map { |type| type.create }
-      else
-        @values = values.zip(type.sub_types).map { |(value, type)| type.create(value) }
-      end
+      @values = if values.nil?
+                  type.sub_types.map(&:create)
+                else
+                  values.zip(type.sub_types)
+                        .map { |(value, sub_type)| sub_type.create(value) }
+                end
     end
 
     def merge(other)
@@ -240,12 +241,12 @@ module Synergydb::Types
       if index >= 0 && index < @values.size
         @values[index] = @values[index].merge(@type.sub_types[index].create(value))
         [[:ok], self]
-        else
+      else
         [[:err, 'Index out of bounds']]
       end
     end
 
-    def get(index=nil)
+    def get
       [:ok, unwrap]
     end
 
@@ -261,7 +262,7 @@ module Synergydb::Types
   end
 
   class Set < BaseType
-    def initialize(type, values=nil)
+    def initialize(type, values = nil)
       @type = type
       @values = {}
 

@@ -1,4 +1,4 @@
-require "synergydb/version"
+require 'synergydb/version'
 
 module Synergydb
 end

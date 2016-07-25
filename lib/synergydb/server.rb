@@ -29,9 +29,7 @@ module Synergydb
     end
 
     def kill
-      @threads.each do |thread|
-        thread.kill
-      end
+      @threads.each(&:kill)
     end
 
     private
