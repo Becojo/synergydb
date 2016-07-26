@@ -51,7 +51,16 @@ describe Synergydb do
       [['set', 'things', 65], [:ok]],
       [['get', 'things'], [:ok, [1, 65]]],
       [['set', 'things', 1], [:ok]],
-      [['get', 'things'], [:ok, [1, 65]]]
+      [['get', 'things'], [:ok, [1, 65]]],
+
+      [['create', 'flag', 'Maybe[Max[Int]]'], [:ok, 'flag']],
+      [['get', 'flag'], [:ok, nil]],
+      [['set', 'flag', 10], [:ok]],
+      [['get', 'flag'], [:ok, 10]],
+      [['set', 'flag', 15], [:ok]],
+      [['get', 'flag'], [:ok, 15]],
+      [['set', 'flag', 10], [:ok]],
+      [['get', 'flag'], [:ok, 15]]
     ]
 
     commands.each do |(command, expected)|

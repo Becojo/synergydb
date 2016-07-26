@@ -297,4 +297,45 @@ module Synergydb::Types
       "Set(#{values})"
     end
   end
+
+  class Maybe < BaseType
+    def initialize(type, value = nil)
+      @type = type
+      @value = if value.nil?
+                 nil
+               else
+                 type.sub_type.create(value)
+               end
+    end
+
+    def unwrap
+      @value.unwrap unless @value.nil?
+    end
+
+    def set(value)
+      @value = if @value.nil?
+                 @type.sub_type.create(value)
+               else
+                 @value.merge(@type.sub_type.create(value))
+               end
+
+      [[:ok], self]
+    end
+
+    def get
+      [:ok, unwrap]
+    end
+
+    def merge(other)
+      if @value.nil?
+        other
+      else
+        self
+      end
+    end
+
+    def to_s
+      "Maybe[#{@value}]"
+    end
+  end
 end
