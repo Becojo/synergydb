@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'irb'
-require 'socket'
 require 'synergydb/types'
 require 'synergydb/client'
 
@@ -20,11 +19,11 @@ class DSL
     end
 
     def set(*args)
-      @parent.get(@name, *args)
+      @parent.set(*([@name] + args))
     end
 
     def get(*args)
-      @parent.get(@name, *args)
+      @parent.get(*([@name] + args))
     end
 
     def type

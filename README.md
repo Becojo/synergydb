@@ -23,21 +23,24 @@ Or install it yourself as:
 
 ## Example
 
+1. Start the server with `synergy-server`
+2. Start an interactive client with `synergy-client`
+
 ```
->> create votes Map[Min[Timestamped[Str]]]
-=> "ok"
+>> db.create(:votes, Map[Min[Timestamped[Str]]])
+=> ["ok"]
 
->> set votes user1 [1467596021814, "candidate1"]
-=> "ok"
+>> db.votes.set(:user1, [1467596021814, "candidate1"])
+=> ["ok"]
 
->> get votes user1
-=> [1467596021814, "candidate1"]
+>> db.votes.get(:user1)
+=> ["ok", [1467596021814, "candidate1"]]
 
->> set votes user1 [1467596021914, "candidate2"]
-=> "ok"
+>> db.votes.set(:user1, [1467596021815, "candidate2"])
+=> ["ok"]
 
->> get votes user1
-=> [1467596021814, "candidate1"]
+>> db.votes.get(:user1)
+=> ["ok", [1467596021814, "candidate1"]]
 ```
 
 ## Types
@@ -49,10 +52,10 @@ Represents a key-value object. The type of the keys are always strings and the v
 Represents a value at a given point of time. The type `T` can be anything, the order of this type is solely based on the timestamp.
 
 ### `Max[T]`
-Defines a join-semilattice. The type `T` must be orderable.
+Max type that when merged returns that largest value. The type `T` must be orderable.
 
 ### `Min[T]`
-Defines a meet-semilattice. The type `T` must be orderable.
+Min type that when merged returns that smallest value. The type `T` must be orderable.
 
 ### `Nat`
 Represents a natural number.
